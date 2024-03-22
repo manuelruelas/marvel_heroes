@@ -5,6 +5,14 @@ class HeroListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: ListView.builder(
+          itemCount: 3,
+          itemBuilder: (context, index) {
+            return const ListTile(
+              title: Text("Nombre de heroe"),
+            );
+          }),
+    );
   }
 }
