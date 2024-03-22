@@ -8,7 +8,7 @@ import 'package:marvel_heroes/presentation/pages/hero_list/hero_list_controller.
 class HeroListBinding implements Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<CharacterService>(() => CharacterService());
+    Get.lazyPut<CharacterService>(() => CharacterService(client: Get.find()));
     Get.lazyPut<CharacterRepository>(
         () => CharacterRepositoryImpl(service: Get.find()));
     Get.lazyPut(() => FetchCharactersUsecase(repository: Get.find()));

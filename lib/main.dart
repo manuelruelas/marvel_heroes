@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:marvel_heroes/presentation/bindings/app_binding.dart';
 import 'package:marvel_heroes/presentation/bindings/hero_list_binding.dart';
 import 'package:marvel_heroes/presentation/pages/hero_list/hero_list_page.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(const MainApp());
 }
 
@@ -14,11 +17,13 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       initialRoute: "/character",
+      initialBinding: AppBinding(),
       getPages: [
         GetPage(
-            name: "/character",
-            page: () => HeroListPage(),
-            binding: HeroListBinding())
+          name: "/character",
+          page: () => HeroListPage(),
+          binding: HeroListBinding(),
+        )
       ],
     );
   }
