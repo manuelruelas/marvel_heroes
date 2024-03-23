@@ -21,5 +21,5 @@ Map<String, dynamic> _$CharacterModelToJson(CharacterModel instance) =>
       'id': instance.id,
       'name': instance.name,
       'description': instance.description,
-      'thumbnail': instance.thumbnail,
+      'thumbnail': instance.thumbnail?.toJson(),
     };

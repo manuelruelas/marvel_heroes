@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:marvel_heroes/data/local/characters_local.dart';
 import 'package:marvel_heroes/data/remote/character_service.dart';
 import 'package:marvel_heroes/data/repository/character_repository_impl.dart';
 import 'package:marvel_heroes/domain/repository/character_repository.dart';
@@ -9,8 +10,11 @@ class HeroListBinding implements Bindings {
   @override
   void dependencies() {
     Get.lazyPut<CharacterService>(() => CharacterService(client: Get.find()));
-    Get.lazyPut<CharacterRepository>(
-        () => CharacterRepositoryImpl(service: Get.find()));
+    Get.lazyPut<CharactersLocal>(() => CharactersLocal(localDB: Get.find()));
+    Get.lazyPut<CharacterRepository>(() => CharacterRepositoryImpl(
+          service: Get.find(),
+          localCharacters: Get.find(),
+        ));
     Get.lazyPut(() => FetchCharactersUsecase(repository: Get.find()));
     Get.lazyPut(() => HeroListController(Get.find()));
   }

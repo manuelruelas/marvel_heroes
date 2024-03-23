@@ -26,6 +26,8 @@ class CharacterItem extends StatelessWidget {
               image: character.thumbnailUrl!,
               height: 100,
               width: 100,
+              imageCacheHeight: 100,
+              imageCacheWidth: 100,
               fit: BoxFit.cover,
             ),
           ),
