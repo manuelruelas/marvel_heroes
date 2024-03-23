@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:marvel_heroes/data/local/characters_local.dart';
 import 'package:marvel_heroes/data/model/character_model.dart';
 import 'package:marvel_heroes/data/remote/character_service.dart';

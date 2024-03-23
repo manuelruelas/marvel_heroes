@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:marvel_heroes/data/model/character_model.dart';
-import 'package:marvel_heroes/data/model/marvel_api_data.dart';
 import 'package:marvel_heroes/data/model/marvel_api_response.dart';
 
 class CharacterService {
