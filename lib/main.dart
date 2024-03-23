@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:marvel_heroes/presentation/bindings/app_binding.dart';
 import 'package:marvel_heroes/presentation/bindings/hero_list_binding.dart';
+import 'package:marvel_heroes/presentation/pages/hero_detail/hero_detail_page.dart';
 import 'package:marvel_heroes/presentation/pages/hero_list/hero_list_page.dart';
 
 void main() async {
@@ -23,7 +24,11 @@ class MainApp extends StatelessWidget {
           name: "/character",
           page: () => HeroListPage(),
           binding: HeroListBinding(),
-        )
+        ),
+        GetPage(
+          name: "/detail",
+          page: () => const HeroDetailPage(),
+        ),
       ],
     );
   }

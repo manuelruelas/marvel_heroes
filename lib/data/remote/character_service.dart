@@ -25,4 +25,13 @@ class CharacterService {
       rethrow;
     }
   }
+
+  Future<int> getCharactersTotal() async {
+    final response = await client.get<Map<String, dynamic>>('/characters',
+        queryParameters: {"offset": 0, "limit": 1});
+    final parsedResponse = MarvelApiResponse.fromJson(
+        response.data as Map<String, dynamic>, (p0) => null);
+
+    return parsedResponse.data.total;
+  }
 }

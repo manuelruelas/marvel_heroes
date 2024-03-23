@@ -1,24 +1,39 @@
 import 'dart:async';
 
 import 'package:get/state_manager.dart';
+import 'package:marvel_heroes/core/domain/usecase.dart';
 import 'package:marvel_heroes/domain/entity/character.dart';
 import 'package:marvel_heroes/domain/usecase/fetch_characters_usecase.dart';
+import 'package:marvel_heroes/domain/usecase/get_characters_total_usecase.dart';
 
 class HeroListController extends GetxController {
   final FetchCharactersUsecase _fetchCharactersUsecase;
+  final GetCharactersTotalUsecase _getCharactersTotalUsecase;
+  HeroListController({
+    required FetchCharactersUsecase fetchCharactersUsecase,
+    required GetCharactersTotalUsecase getCharactersTotalUsecase,
+  })  : _fetchCharactersUsecase = fetchCharactersUsecase,
+        _getCharactersTotalUsecase = getCharactersTotalUsecase;
 
-  HeroListController(this._fetchCharactersUsecase);
-  final List<Character> _originalCharacters = [];
   final characters = <Character>[].obs;
   var isLoading = true.obs;
-  var currentPage = 0.obs;
-  final pageSize = 20;
   var infiniteScrollEnabled = true.obs;
+  final charactersTotal = 0.obs;
+
+  final List<Character> _originalCharacters = [];
+
   Timer? _debounce;
+
   @override
   void onInit() {
     super.onInit();
+    getTotal();
     fetchCharacters();
+  }
+
+  void getTotal() async {
+    final total = await _getCharactersTotalUsecase.call(NoParams());
+    charactersTotal.value = total;
   }
 
   void fetchCharacters() async {
@@ -30,7 +45,6 @@ class HeroListController extends GetxController {
       ));
       characters.addAll(fetchedCharacters);
       _originalCharacters.addAll(fetchedCharacters);
-      currentPage++;
     } finally {
       isLoading(false);
     }
@@ -50,7 +64,7 @@ class HeroListController extends GetxController {
       }
 
       final queryLowercase = query.toLowerCase();
-      final filteredCharacters = characters
+      final filteredCharacters = _originalCharacters
           .where((character) =>
               character.name.toLowerCase().contains(queryLowercase))
           .toList();

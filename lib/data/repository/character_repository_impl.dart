@@ -31,4 +31,10 @@ class CharacterRepositoryImpl implements CharacterRepository {
     }
     return characters.map((e) => e.toEntity()).toList();
   }
+
+  @override
+  Future<int> getCharactersTotal() async {
+    final response = await service.getCharactersTotal();
+    return response;
+  }
 }

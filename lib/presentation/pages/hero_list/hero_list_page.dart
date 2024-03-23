@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/state_manager.dart';
 import 'package:marvel_heroes/presentation/pages/hero_list/hero_list_controller.dart';
 import 'package:marvel_heroes/presentation/widgets/character_item.dart';
 
@@ -27,6 +30,7 @@ class HeroListPage extends StatelessWidget {
         title: const Text("Characters"),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -36,6 +40,27 @@ class HeroListPage extends StatelessWidget {
               onChanged: (value) {
                 _controller.search(value);
               },
+              keyboardType: TextInputType.text,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Obx(
+                  () => CounterCard(
+                    title: "Listed",
+                    value: _controller.characters.length,
+                  ),
+                ),
+                Obx(
+                  () => CounterCard(
+                    title: "Total",
+                    value: _controller.charactersTotal.value,
+                  ),
+                )
+              ],
             ),
           ),
           Expanded(
@@ -57,7 +82,12 @@ class HeroListPage extends StatelessWidget {
                       );
                     } else {
                       final characters = _controller.characters;
-                      return CharacterItem(character: characters[index]);
+                      return CharacterItem(
+                        character: characters[index],
+                        onPressed: () {
+                          Get.toNamed("/detail", arguments: characters[index]);
+                        },
+                      );
                     }
                   },
                 ),
@@ -66,6 +96,26 @@ class HeroListPage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class CounterCard extends StatelessWidget {
+  final int value;
+  final String title;
+  const CounterCard({super.key, this.value = 0, this.title = ""});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          value.toString(),
+          style: Theme.of(context).textTheme.displaySmall,
+        ),
+        Text(title),
+      ],
     );
   }
 }
