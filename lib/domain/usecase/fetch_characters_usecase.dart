@@ -10,7 +10,8 @@ class FetchCharactersUsecase
 
   @override
   Future<List<Character>> call(FetchCharactersParams params) {
-    return repository.getCharacters();
+    final limit = params.offset >= 0 ? 10 : 20;
+    return repository.getCharacters(limit: limit, offset: params.offset);
   }
 }
 

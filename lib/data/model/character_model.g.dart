@@ -11,6 +11,9 @@ CharacterModel _$CharacterModelFromJson(Map<String, dynamic> json) =>
       id: json['id'] as int,
       name: json['name'] as String,
       description: json['description'] as String?,
+      thumbnail: json['thumbnail'] == null
+          ? null
+          : ThumbnailModel.fromJson(json['thumbnail']),
     );
 
 Map<String, dynamic> _$CharacterModelToJson(CharacterModel instance) =>
@@ -18,4 +21,5 @@ Map<String, dynamic> _$CharacterModelToJson(CharacterModel instance) =>
       'id': instance.id,
       'name': instance.name,
       'description': instance.description,
+      'thumbnail': instance.thumbnail,
     };

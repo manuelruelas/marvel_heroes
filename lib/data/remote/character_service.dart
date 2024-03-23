@@ -8,14 +8,17 @@ class CharacterService {
 
   CharacterService({required this.client});
 
-  Future<List<CharacterModel>> getCharacters() async {
+  Future<List<CharacterModel>> getCharacters(
+      {int offset = 0, int limit = 10}) async {
     try {
-      final response = await client.get<Map<String, dynamic>>('/characters');
+      final response = await client.get<Map<String, dynamic>>('/characters',
+          queryParameters: {"offset": offset, "limit": limit});
       final apiResponse = MarvelApiResponse<List<CharacterModel>>.fromJson(
         response.data as Map<String, dynamic>,
         (jsonList) => (jsonList as List)
             .map(
-                (char) => CharacterModel.fromJson(char as Map<String, dynamic>))
+              (char) => CharacterModel.fromJson(char as Map<String, dynamic>),
+            )
             .toList(),
       );
       return apiResponse.data.results;

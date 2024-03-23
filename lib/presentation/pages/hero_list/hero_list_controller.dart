@@ -23,8 +23,7 @@ class HeroListController extends GetxController {
       isLoading(true);
       final fetchedCharacters =
           await _fetchCharactersUsecase.call(FetchCharactersParams(
-        limit: pageSize,
-        offset: currentPage.value * 10,
+        offset: characters.length,
       ));
       characters.addAll(fetchedCharacters);
       currentPage++;
