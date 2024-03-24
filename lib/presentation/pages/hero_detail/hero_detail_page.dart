@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marvel_heroes/domain/entity/character.dart';
+import 'package:marvel_heroes/domain/entity/comics.dart';
 
 class HeroDetailPage extends StatelessWidget {
   const HeroDetailPage({super.key});
@@ -16,11 +17,14 @@ class HeroDetailPage extends StatelessWidget {
       body: Stack(
         children: [
           Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(character.thumbnailUrl ?? ""),
-                  fit: BoxFit.cover,
+            child: Hero(
+              tag: character.id,
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(character.thumbnailUrl ?? ""),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
@@ -60,10 +64,42 @@ class HeroDetailPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 10.0),
                       Text(
-                        character.description ?? 'No description available',
-                        style: const TextStyle(fontSize: 16.0),
+                        character.description!.isNotEmpty
+                            ? character.description!
+                            : 'No description available',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(color: Colors.black54),
                       ),
-                      // Otros detalles del personaje
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      if (character.comicAppearances != null) ...{
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Comic Appearances",
+                              style: Theme.of(context).textTheme.headlineSmall,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  for (Comics comic
+                                      in character.comicAppearances!)
+                                    Text(
+                                      "- ${comic.name}",
+                                      style: const TextStyle(fontSize: 12.0),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      }
                     ],
                   ),
                 ),

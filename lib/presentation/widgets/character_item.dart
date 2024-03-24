@@ -27,14 +27,17 @@ class CharacterItem extends StatelessWidget {
                 bottomLeft: Radius.circular(
                     16.0), // Esquina inferior izquierda redondeada
               ),
-              child: FadeInImage.assetNetwork(
-                placeholder: "assets/images/loading.gif",
-                image: character.thumbnailUrl!,
-                height: 100,
-                width: 100,
-                imageCacheHeight: 100,
-                imageCacheWidth: 100,
-                fit: BoxFit.cover,
+              child: Hero(
+                tag: character.id,
+                child: FadeInImage.assetNetwork(
+                  placeholder: "assets/images/loading.gif",
+                  image: character.thumbnailUrl!,
+                  height: 100,
+                  width: 100,
+                  imageCacheHeight: 100,
+                  imageCacheWidth: 100,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Expanded(
