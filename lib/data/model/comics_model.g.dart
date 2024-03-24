@@ -14,5 +14,5 @@ ComicsModel _$ComicsModelFromJson(Map<String, dynamic> json) => ComicsModel(
 
 Map<String, dynamic> _$ComicsModelToJson(ComicsModel instance) =>
     <String, dynamic>{
-      'items': instance.items,
+      'items': instance.items.map((e) => e.toJson()).toList(),
     };

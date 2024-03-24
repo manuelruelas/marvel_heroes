@@ -3,7 +3,7 @@ import 'package:marvel_heroes/data/model/comic_appearances_model.dart';
 
 part 'comics_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class ComicsModel {
   List<ComicAppearancesModel> items;
 

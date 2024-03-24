@@ -55,11 +55,11 @@ class HeroListController extends GetxController {
   /// When query is empty load origina characters
   void search(String query) {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
+
     _debounce = Timer(const Duration(milliseconds: 500), () {
       infiniteScrollEnabled(false);
       if (query.isEmpty) {
-        characters.value = _originalCharacters;
-        infiniteScrollEnabled(true);
+        clear();
         return;
       }
 
@@ -70,5 +70,10 @@ class HeroListController extends GetxController {
           .toList();
       characters.value = filteredCharacters;
     });
+  }
+
+  void clear() {
+    characters.value = _originalCharacters;
+    infiniteScrollEnabled(true);
   }
 }
