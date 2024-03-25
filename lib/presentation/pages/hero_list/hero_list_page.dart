@@ -83,6 +83,12 @@ class HeroListPage extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Obx(
                 () {
+                  if (_controller.isLoading.value &&
+                      _controller.characters.isEmpty) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
                   if (_controller.characters.isEmpty) {
                     return Center(
                       child: Text(
