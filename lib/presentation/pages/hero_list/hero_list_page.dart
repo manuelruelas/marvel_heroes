@@ -9,6 +9,7 @@ import 'package:marvel_heroes/presentation/widgets/counter_card.dart';
 class HeroListPage extends StatelessWidget {
   HeroListPage({super.key}) {
     _scrollController.addListener(_scrollListener);
+    _controller.fetchCharacters();
   }
 
   final ScrollController _scrollController = ScrollController();
@@ -16,7 +17,11 @@ class HeroListPage extends StatelessWidget {
   final TextEditingController _searchController = TextEditingController();
 
   void _scrollListener() {
-    if (!_controller.infiniteScrollEnabled.value) return;
+    final isLoading = _controller.isLoading.value;
+    final infiniteScrollEnabled = _controller.infiniteScrollEnabled.value;
+
+    if (!infiniteScrollEnabled || isLoading) return;
+
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
       _controller.fetchCharacters();
@@ -39,7 +44,7 @@ class HeroListPage extends StatelessWidget {
               leading: const Icon(Icons.search),
               hintText: "Search",
               onChanged: (value) {
-                _controller.search(value);
+                _controller.onSearchChange(value);
               },
               keyboardType: TextInputType.text,
               trailing: [
@@ -47,7 +52,7 @@ class HeroListPage extends StatelessWidget {
                   icon: const Icon(Icons.clear),
                   onPressed: () {
                     _searchController.clear();
-                    _controller.clear();
+                    _controller.clearSearch();
                   },
                 ),
               ],

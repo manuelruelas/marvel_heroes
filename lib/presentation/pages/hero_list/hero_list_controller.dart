@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:get/state_manager.dart';
 import 'package:marvel_heroes/core/domain/usecase.dart';
@@ -9,6 +10,7 @@ import 'package:marvel_heroes/domain/usecase/get_characters_total_usecase.dart';
 class HeroListController extends GetxController {
   final FetchCharactersUsecase _fetchCharactersUsecase;
   final GetCharactersTotalUsecase _getCharactersTotalUsecase;
+
   HeroListController({
     required FetchCharactersUsecase fetchCharactersUsecase,
     required GetCharactersTotalUsecase getCharactersTotalUsecase,
@@ -20,7 +22,7 @@ class HeroListController extends GetxController {
   var infiniteScrollEnabled = true.obs;
   final charactersTotal = 0.obs;
 
-  final List<Character> _originalCharacters = [];
+  List<Character> _originalCharacters = [];
 
   Timer? _debounce;
 
@@ -28,7 +30,6 @@ class HeroListController extends GetxController {
   void onInit() {
     super.onInit();
     getTotal();
-    fetchCharacters();
   }
 
   void getTotal() async {
@@ -36,15 +37,17 @@ class HeroListController extends GetxController {
     charactersTotal.value = total;
   }
 
-  void fetchCharacters() async {
+  Future<void> fetchCharacters() async {
+    isLoading(true);
     try {
-      isLoading(true);
       final fetchedCharacters =
           await _fetchCharactersUsecase.call(FetchCharactersParams(
         offset: characters.length,
       ));
       characters.addAll(fetchedCharacters);
-      _originalCharacters.addAll(fetchedCharacters);
+      _originalCharacters = characters.toList();
+    } catch (e) {
+      log(e.toString());
     } finally {
       isLoading(false);
     }
@@ -53,26 +56,30 @@ class HeroListController extends GetxController {
   /// Search in loaded characters
   /// Delay search 500 milliseconds
   /// When query is empty load origina characters
-  void search(String query) {
+  Future<void> onSearchChange(String query) async {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
 
     _debounce = Timer(const Duration(milliseconds: 500), () {
-      infiniteScrollEnabled(false);
-      if (query.isEmpty) {
-        clear();
-        return;
-      }
-
-      final queryLowercase = query.toLowerCase();
-      final filteredCharacters = _originalCharacters
-          .where((character) =>
-              character.name.toLowerCase().contains(queryLowercase))
-          .toList();
-      characters.value = filteredCharacters;
+      searchCharacters(query);
     });
   }
 
-  void clear() {
+  void searchCharacters(String query) {
+    infiniteScrollEnabled(false);
+    if (query.isEmpty) {
+      clearSearch();
+      return;
+    }
+
+    final queryLowercase = query.toLowerCase();
+    final filteredCharacters = _originalCharacters
+        .where((character) =>
+            character.name.toLowerCase().contains(queryLowercase))
+        .toList();
+    characters.value = filteredCharacters;
+  }
+
+  void clearSearch() {
     characters.value = _originalCharacters;
     infiniteScrollEnabled(true);
   }
