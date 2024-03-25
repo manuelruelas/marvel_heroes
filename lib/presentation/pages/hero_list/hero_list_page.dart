@@ -69,7 +69,7 @@ class HeroListPage extends StatelessWidget {
     );
   }
 
-  ListView _buildCharacterList() {
+  Widget _buildCharacterList() {
     return ListView.builder(
       controller: _scrollController,
       itemCount: _controller.characters.length + 1,
