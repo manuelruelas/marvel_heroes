@@ -12,7 +12,7 @@ class HeroDetailPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detalles del Personaje'),
+        title: const Text('Detail'),
       ),
       body: Stack(
         children: [
@@ -85,17 +85,29 @@ class HeroDetailPage extends StatelessWidget {
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  for (Comics comic
-                                      in character.comicAppearances!)
-                                    Text(
-                                      "- ${comic.name}",
-                                      style: const TextStyle(fontSize: 12.0),
+                              child: character.comicAppearances!.isEmpty
+                                  ? Text(
+                                      character.description!.isNotEmpty
+                                          ? character.description!
+                                          : 'No comics available',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(color: Colors.black54),
+                                    )
+                                  : Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        for (Comics comic
+                                            in character.comicAppearances!)
+                                          Text(
+                                            "- ${comic.name}",
+                                            style:
+                                                const TextStyle(fontSize: 12.0),
+                                          ),
+                                      ],
                                     ),
-                                ],
-                              ),
                             ),
                           ],
                         ),
